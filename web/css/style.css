@@ -263,10 +263,11 @@ body {
    PAGE STRUCTURE
    ======================================== */
 
-/* Hide all pages by default */
+/* Hide all sidebar pages by default */
 #adminPage,
 #kasirPage,
-#dapurPage {
+#dapurPage,
+#pelayanPage {
     display: none !important;
 }
 
@@ -282,7 +283,8 @@ body {
 /* Sidebar pages need flex display when active */
 #adminPage.active,
 #kasirPage.active,
-#dapurPage.active {
+#dapurPage.active,
+#pelayanPage.active {
     display: flex !important;
 }
 
@@ -621,6 +623,16 @@ body {
 .status-badge.processing {
     background: rgba(139, 90, 43, 0.2);
     color: var(--secondary-brown);
+}
+
+.status-badge.ready {
+    background: rgba(201, 162, 39, 0.2);
+    color: var(--warning);
+}
+
+.status-badge.delivering {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
 }
 
 .action-btns {

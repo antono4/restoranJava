@@ -475,6 +475,104 @@
             </main>
         </div>
 
+        <!-- Dashboard Pelayan -->
+        <div id="pelayanPage" class="page">
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Restoran Jawa</h2>
+                    <p>Pelayan</p>
+                </div>
+                <ul class="nav-menu">
+                    <li data-page="pelayan-dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-page="pesanan-siap">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Pesanan Siap</span>
+                    </li>
+                    <li data-page="pesanan-diantar">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Sedang Diantar</span>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="pelayanName">Pelayan</span>
+                    </div>
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </nav>
+            <main class="main-content">
+                <!-- Pelayan Dashboard -->
+                <section id="pelayan-dashboard" class="content-section">
+                    <div class="page-header">
+                        <h1>Dashboard Pelayan</h1>
+                        <p>Selamat datang, <span id="pelayanWelcome">Pelayan</span></p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f39c12, #d68910);">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="siapDiantar">0</h3>
+                                <p>Pesanan Siap Diantar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                                <i class="fas fa-running"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="sedangDiantar">0</h3>
+                                <p>Sedang Diantar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #27ae60, #1e8449);">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="selesaiDiantar">0</h3>
+                                <p>Selesai Diantar</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-orders">
+                        <h2> Pesanan Perlu Ditangani</h2>
+                        <div class="order-cards" id="pelayanOrderCards">
+                            <!-- Order cards will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pesanan Siap Diantar -->
+                <section id="pesanan-siap" class="content-section">
+                    <div class="page-header">
+                        <h1>Pesanan Siap Diantar</h1>
+                    </div>
+                    <div class="order-cards" id="pesananSiapCards">
+                        <!-- Orders ready to deliver -->
+                    </div>
+                </section>
+
+                <!-- Pesanan Sedang Diantar -->
+                <section id="pesanan-diantar" class="content-section">
+                    <div class="page-header">
+                        <h1>Pesanan Sedang Diantar</h1>
+                    </div>
+                    <div class="order-cards" id="pesananDiantarCards">
+                        <!-- Orders being delivered -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
         <!-- Modal -->
         <div id="modal" class="modal">
             <div class="modal-content">

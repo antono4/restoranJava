@@ -8,7 +8,8 @@ const database = {
     users: [
         { userID: 1, username: 'admin', password: 'admin123', fullName: 'Administrator', userGrant: 1 },
         { userID: 2, username: 'kasir', password: 'kasir123', fullName: 'Ani Kasir', userGrant: 2 },
-        { userID: 3, username: 'dapur', password: 'dapur123', fullName: 'Budi Dapur', userGrant: 3 }
+        { userID: 3, username: 'dapur', password: 'dapur123', fullName: 'Budi Dapur', userGrant: 3 },
+        { userID: 4, username: 'pelayan', password: 'pelayan123', fullName: 'Citra Pelayan', userGrant: 4 }
     ],
     foodCategory: [
         { categoryID: 1, categoryName: 'Makanan Utama' },
@@ -56,6 +57,7 @@ function getRoleName(role) {
         case 1: return 'Administrator';
         case 2: return 'Kasir';
         case 3: return 'Dapur';
+        case 4: return 'Pelayan';
         default: return '-';
     }
 }
@@ -164,6 +166,12 @@ function handleLogin(event) {
             document.getElementById('dapurWelcome').textContent = user.fullName;
             loadDapurDashboard();
             showSection('dapur-dashboard');
+        } else if (user.userGrant === 4) {
+            showPage('pelayanPage');
+            document.getElementById('pelayanName').textContent = user.fullName;
+            document.getElementById('pelayanWelcome').textContent = user.fullName;
+            loadPelayanDashboard();
+            showSection('pelayan-dashboard');
         }
     } else {
         loginAlert.textContent = 'Username atau password salah!';
@@ -225,8 +233,10 @@ function loadRecentOrders() {
 function getStatusBadge(status) {
     switch(status) {
         case 0: return { class: 'pending', text: 'Menunggu' };
-        case 1: return { class: 'processing', text: 'Diproses' };
-        case 2: return { class: 'completed', text: 'Selesai' };
+        case 1: return { class: 'processing', text: 'Diproses Dapur' };
+        case 2: return { class: 'ready', text: 'Siap Diantar' };
+        case 3: return { class: 'delivering', text: 'Sedang Diantar' };
+        case 4: return { class: 'completed', text: 'Selesai' };
         default: return { class: 'pending', text: 'Unknown' };
     }
 }
@@ -744,6 +754,9 @@ function submitOrder() {
         return;
     }
     
+    const tableNumber = prompt('Masukkan nomor meja:', '1');
+    if (!tableNumber) return;
+    
     const totalPrice = currentOrder.reduce((sum, item) => sum + (item.price * item.qty), 0);
     const totalQty = currentOrder.reduce((sum, item) => sum + item.qty, 0);
     
@@ -755,14 +768,15 @@ function submitOrder() {
         totalPrice: totalPrice,
         status: 0,
         items: [...currentOrder],
-        createdBy: sessionUser?.userID
+        createdBy: sessionUser?.userID,
+        tableNumber: tableNumber
     };
     
     database.orders.push(order);
     currentOrder = [];
     updateOrderDisplay();
     
-    alert(`Order berhasil disimpan!\n\nNo. Order: ${order.orderNumber}\nTotal: ${formatRupiah(order.totalPrice)}`);
+    alert(`Order berhasil disimpan!\n\nNo. Order: ${order.orderNumber}\nMeja: ${order.tableNumber}\nTotal: ${formatRupiah(order.totalPrice)}`);
     
     loadOrderLists();
     loadKasirDashboard();
@@ -842,17 +856,17 @@ function loadDapurOrderCards() {
 }
 
 function createOrderCard(order) {
-    const statusClass = order.status === 2 ? 'completed' : 'processing';
+    const statusClass = order.status === 2 ? 'ready' : (order.status === 4 ? 'completed' : 'processing');
     const doneBtn = order.status === 1 ? 
         `<button class="btn-done" onclick="completeOrder(${order.orderID})">
-            <i class="fas fa-check"></i> Selesai
+            <i class="fas fa-check"></i> Selesai Masak
         </button>` : '';
     
     return `
         <div class="order-card ${statusClass}">
             <div class="order-card-header">
                 <h3>${order.orderNumber}</h3>
-                <span>${new Date(order.orderTime).toLocaleTimeString('id-ID')}</span>
+                <span>Meja ${order.tableNumber || '-'}</span>
             </div>
             <div class="order-card-body">
                 <div class="order-card-items">
@@ -865,7 +879,7 @@ function createOrderCard(order) {
                 </div>
             </div>
             <div class="order-card-footer">
-                <span>Total: ${formatRupiah(order.totalPrice)}</span>
+                <span>${new Date(order.orderTime).toLocaleTimeString('id-ID')} - Total: ${formatRupiah(order.totalPrice)}</span>
                 ${doneBtn}
             </div>
         </div>
@@ -875,9 +889,108 @@ function createOrderCard(order) {
 function completeOrder(orderId) {
     const order = database.orders.find(o => o.orderID === orderId);
     if (order) {
-        order.status = 2; // Selesai
-        alert('Order telah selesai!');
+        order.status = 2; // Siap diantar (ready for delivery)
+        alert('Order telah selesai dimasak dan siap untuk diantar ke meja!');
         loadDapurDashboard();
+    }
+}
+
+// ========================================
+// PELAYAN FUNCTIONS
+// ========================================
+
+function loadPelayanDashboard() {
+    const today = new Date().toDateString();
+    const todayOrders = database.orders.filter(o => 
+        new Date(o.orderTime).toDateString() === today
+    );
+    
+    document.getElementById('siapDiantar').textContent = 
+        todayOrders.filter(o => o.status === 2).length;
+    document.getElementById('sedangDiantar').textContent = 
+        todayOrders.filter(o => o.status === 3).length;
+    document.getElementById('selesaiDiantar').textContent = 
+        todayOrders.filter(o => o.status === 4).length;
+    
+    loadPelayanOrderCards();
+}
+
+function loadPelayanOrderCards() {
+    const container = document.getElementById('pelayanOrderCards');
+    const siapContainer = document.getElementById('pesananSiapCards');
+    const antarContainer = document.getElementById('pesananDiantarCards');
+    
+    // Orders ready to deliver (status 2)
+    const readyOrders = database.orders.filter(o => o.status === 2);
+    // Orders being delivered (status 3)
+    const deliveringOrders = database.orders.filter(o => o.status === 3);
+    
+    const createCard = (order, showDeliverBtn = true) => {
+        return `
+            <div class="order-card ready">
+                <div class="order-card-header">
+                    <h3>${order.orderNumber}</h3>
+                    <span>Meja ${order.tableNumber || '-'}</span>
+                </div>
+                <div class="order-card-body">
+                    <div class="order-card-items">
+                        ${order.items.map(item => `
+                            <div class="order-card-item">
+                                <span>${item.qty}x ${item.name}</span>
+                                <span>${formatRupiah(item.price * item.qty)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="order-card-footer">
+                    <span>Total: ${formatRupiah(order.totalPrice)}</span>
+                    ${showDeliverBtn ? `
+                        <button class="btn-done" onclick="antarPesanan(${order.orderID})">
+                            <i class="fas fa-paper-plane"></i> Antar
+                        </button>
+                    ` : `
+                        <button class="btn-done" onclick="selesaiPengantaran(${order.orderID})">
+                            <i class="fas fa-check"></i> Selesai
+                        </button>
+                    `}
+                </div>
+            </div>
+        `;
+    };
+    
+    const readyHtml = readyOrders.length === 0 ? 
+        '<p class="text-center">Tidak ada pesanan yang siap diantar</p>' :
+        readyOrders.map(order => createCard(order, true)).join('');
+    
+    const deliveringHtml = deliveringOrders.length === 0 ? 
+        '<p class="text-center">Tidak ada pesanan sedang diantar</p>' :
+        deliveringOrders.map(order => createCard(order, false)).join('');
+    
+    const allHtml = readyOrders.concat(deliveringOrders).length === 0 ?
+        '<p class="text-center">Tidak ada pesanan yang perlu ditangani</p>' :
+        readyOrders.map(order => createCard(order, true)).join('') + 
+        deliveringOrders.map(order => createCard(order, false)).join('');
+    
+    if (container) container.innerHTML = allHtml;
+    if (siapContainer) siapContainer.innerHTML = readyHtml;
+    if (antarContainer) antarContainer.innerHTML = deliveringHtml;
+}
+
+function antarPesanan(orderId) {
+    const order = database.orders.find(o => o.orderID === orderId);
+    if (order) {
+        order.status = 3; // Sedang diantar
+        alert('Pesanan sedang diantar ke meja!');
+        loadPelayanDashboard();
+    }
+}
+
+function selesaiPengantaran(orderId) {
+    const order = database.orders.find(o => o.orderID === orderId);
+    if (order) {
+        order.status = 4; // Selesai
+        alert('Pengantaran pesanan selesai!');
+        loadPelayanDashboard();
     }
 }
 
