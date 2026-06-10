@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restoran Jawa - Rasa Warisan Nusantara</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Merriweather:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Page -->
+        <div id="loginPage" class="page active">
+            <div class="login-container">
+                <div class="ornament-top"></div>
+                <div class="login-header">
+                    <div class="batik-pattern"></div>
+                    <h1>Restoran Jawa</h1>
+                    <p class="subtitle">Rasa Warisan Nusantara</p>
+                    <div class="garland"></div>
+                </div>
+                <form class="login-form" onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i>
+                            <span>Username</span>
+                        </label>
+                        <input type="text" id="username" placeholder="Masukkan username" required>
+                        <span class="alert" id="userAlert"></span>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>
+                            <span>Password</span>
+                        </label>
+                        <input type="password" id="password" placeholder="Masukkan password" required>
+                        <span class="alert" id="passAlert"></span>
+                    </div>
+                    <div class="alert-global" id="loginAlert"></div>
+                    <button type="submit" class="btn-login">
+                        <span>Masuk</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                <div class="ornament-bottom"></div>
+            </div>
+        </div>
+
+        <!-- Dashboard Admin -->
+        <div id="adminPage" class="page">
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Restoran Jawa</h2>
+                    <p>Admin Panel</p>
+                </div>
+                <ul class="nav-menu">
+                    <li data-page="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-page="menu">
+                        <i class="fas fa-utensils"></i>
+                        <span>Kelola Menu</span>
+                    </li>
+                    <li data-page="kategori">
+                        <i class="fas fa-list"></i>
+                        <span>Kategori</span>
+                    </li>
+                    <li data-page="users">
+                        <i class="fas fa-users"></i>
+                        <span>Pengguna</span>
+                    </li>
+                    <li data-page="laporan">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan</span>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="adminName">Admin</span>
+                    </div>
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </nav>
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section">
+                    <div class="page-header">
+                        <h1>Dashboard</h1>
+                        <p>Selamat datang di panel administrasi</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #d4a574, #8b5a2b);">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalMenu">0</h3>
+                                <p>Total Menu</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4a7c59, #2d5a3d);">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalOrder">0</h3>
+                                <p>Order Hari Ini</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #c9a227, #8b6914);">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalPendapatan">Rp 0</h3>
+                                <p>Pendapatan Hari Ini</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #8b4513, #5c2d0a);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalUser">0</h3>
+                                <p>Total Pengguna</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-orders">
+                        <h2>Order Terbaru</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>No. Order</th>
+                                    <th>Waktu</th>
+                                    <th>Jumlah Item</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Menu Section -->
+                <section id="menu" class="content-section">
+                    <div class="page-header">
+                        <h1>Kelola Menu</h1>
+                        <button class="btn-primary" onclick="showAddMenuModal()">
+                            <i class="fas fa-plus"></i>
+                            <span>Tambah Menu</span>
+                        </button>
+                    </div>
+                    <div class="filter-bar">
+                        <input type="text" id="searchMenu" placeholder="Cari menu..." onkeyup="filterMenu()">
+                        <select id="filterKategori" onchange="filterMenu()">
+                            <option value="">Semua Kategori</option>
+                        </select>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Menu</th>
+                                <th>Kategori</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuTable">
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Kategori Section -->
+                <section id="kategori" class="content-section">
+                    <div class="page-header">
+                        <h1>Kelola Kategori</h1>
+                        <button class="btn-primary" onclick="showAddKategoriModal()">
+                            <i class="fas fa-plus"></i>
+                            <span>Tambah Kategori</span>
+                        </button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama Kategori</th>
+                                <th>Jumlah Menu</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kategoriTable">
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Users Section -->
+                <section id="users" class="content-section">
+                    <div class="page-header">
+                        <h1>Kelola Pengguna</h1>
+                        <button class="btn-primary" onclick="showAddUserModal()">
+                            <i class="fas fa-plus"></i>
+                            <span>Tambah Pengguna</span>
+                        </button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Nama Lengkap</th>
+                                <th>Role</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Laporan Section -->
+                <section id="laporan" class="content-section">
+                    <div class="page-header">
+                        <h1>Laporan Penjualan</h1>
+                    </div>
+                    <div class="filter-bar">
+                        <input type="date" id="tanggalAwal">
+                        <span> hingga </span>
+                        <input type="date" id="tanggalAkhir">
+                        <button class="btn-primary" onclick="generateReport()">
+                            <i class="fas fa-filter"></i>
+                            <span>Filter</span>
+                        </button>
+                    </div>
+                    <div class="report-summary">
+                        <div class="report-card">
+                            <h3>Total Penjualan</h3>
+                            <p id="reportTotal">Rp 0</p>
+                        </div>
+                        <div class="report-card">
+                            <h3>Total Order</h3>
+                            <p id="reportOrder">0</p>
+                        </div>
+                        <div class="report-card">
+                            <h3>Menu Terlaris</h3>
+                            <p id="reportBestSeller">-</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Dashboard Kasir -->
+        <div id="kasirPage" class="page">
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Restoran Jawa</h2>
+                    <p>Kasir</p>
+                </div>
+                <ul class="nav-menu">
+                    <li data-page="kasir-dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-page="buat-order">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Buat Order</span>
+                    </li>
+                    <li data-page="daftar-order">
+                        <i class="fas fa-list"></i>
+                        <span>Daftar Order</span>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="kasirName">Kasir</span>
+                    </div>
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </nav>
+            <main class="main-content">
+                <!-- Kasir Dashboard -->
+                <section id="kasir-dashboard" class="content-section">
+                    <div class="page-header">
+                        <h1>Dashboard Kasir</h1>
+                        <p>Selamat datang, <span id="kasirWelcome">Kasir</span></p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4a7c59, #2d5a3d);">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pendingOrders">0</h3>
+                                <p>Menunggu Pembayaran</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #d4a574, #8b5a2b);">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedOrders">0</h3>
+                                <p>Selesai Hari Ini</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quick-actions">
+                        <h2>Aksi Cepat</h2>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="navigateTo('buat-order')">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Buat Order Baru</span>
+                            </button>
+                            <button class="action-btn" onclick="navigateTo('daftar-order')">
+                                <i class="fas fa-list"></i>
+                                <span>Lihat Daftar Order</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Buat Order -->
+                <section id="buat-order" class="content-section">
+                    <div class="page-header">
+                        <h1>Buat Order Baru</h1>
+                    </div>
+                    <div class="order-container">
+                        <div class="menu-section">
+                            <div class="filter-bar">
+                                <input type="text" id="searchMenuKasir" placeholder="Cari menu..." onkeyup="filterMenuKasir()">
+                                <select id="filterKategoriKasir" onchange="filterMenuKasir()">
+                                    <option value="">Semua Kategori</option>
+                                </select>
+                            </div>
+                            <div class="menu-grid" id="menuGrid">
+                                <!-- Menu items will be loaded here -->
+                            </div>
+                        </div>
+                        <div class="order-section">
+                            <h2>Order Saat Ini</h2>
+                            <div class="order-items" id="orderItems">
+                                <p class="empty-order">Belum ada item dalam order</p>
+                            </div>
+                            <div class="order-summary">
+                                <div class="summary-row">
+                                    <span>Total Item:</span>
+                                    <span id="totalItem">0</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Harga:</span>
+                                    <span id="totalHarga">Rp 0</span>
+                                </div>
+                            </div>
+                            <div class="order-actions">
+                                <button class="btn-secondary" onclick="resetOrder()">Reset</button>
+                                <button class="btn-primary" onclick="submitOrder()">
+                                    <i class="fas fa-check"></i>
+                                    <span>Proses Order</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Daftar Order -->
+                <section id="daftar-order" class="content-section">
+                    <div class="page-header">
+                        <h1>Daftar Order</h1>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No. Order</th>
+                                <th>Waktu</th>
+                                <th>Jumlah Item</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderListsTable">
+                        </tbody>
+                    </table>
+                </section>
+            </main>
+        </div>
+
+        <!-- Dashboard Dapur -->
+        <div id="dapurPage" class="page">
+            <nav class="sidebar">
+                <div class="sidebar-header">
+                    <h2>Restoran Jawa</h2>
+                    <p>Dapur</p>
+                </div>
+                <ul class="nav-menu">
+                    <li data-page="dapur-dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li data-page="pesanan-masuk">
+                        <i class="fas fa-bell"></i>
+                        <span>Pesanan Masuk</span>
+                    </li>
+                </ul>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="dapurName">Dapur</span>
+                    </div>
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </button>
+                </div>
+            </nav>
+            <main class="main-content">
+                <!-- Dapur Dashboard -->
+                <section id="dapur-dashboard" class="content-section">
+                    <div class="page-header">
+                        <h1>Dashboard Dapur</h1>
+                        <p>Selamat datang, <span id="dapurWelcome">Koki</span></p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="pendingDapur">0</h3>
+                                <p>Menunggu Diproses</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #27ae60, #1e8449);">
+                                <i class="fas fa-check-double"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="completedDapur">0</h3>
+                                <p>Selesai Hari Ini</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="recent-orders">
+                        <h2>Pesanan Terbaru</h2>
+                        <div class="order-cards" id="dapurOrderCards">
+                            <!-- Order cards will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pesanan Masuk -->
+                <section id="pesanan-masuk" class="content-section">
+                    <div class="page-header">
+                        <h1>Pesanan Masuk</h1>
+                    </div>
+                    <div class="order-cards" id="allOrderCards">
+                        <!-- All orders will be loaded here -->
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Modal Title</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Modal content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
