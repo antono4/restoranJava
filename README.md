@@ -1,5 +1,8 @@
 # restoranJava
 
+> **Created by Antono**
+
+
 Aplikasi ini adalah aplikasi hasil tugas praktikum mata kuliah dasar pemrograman. Aplikasi ini dibuat menggunakan
 bahasa pemrograman Java dan IDE NetBeans.
 
