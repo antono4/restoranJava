@@ -1,86 +1,75 @@
-<!-- README ini dihasilkan otomatis oleh .github/workflows/generate-readme.yml -->
-<!-- Jangan edit manual: perubahan akan ditimpa pada run berikutnya. -->
+<!-- README ini dihasilkan otomatis oleh workflow .github/workflows/generate-readme.yml -->
+<!-- Jangan edit manual; perubahan akan ditim pada run berikutnya. -->
 
-<h1 align="center">restoranJava 👋</h1>
+<h1 align="center">Project 👋</h1>
 
 <p align="center">
-  <em>Aplikasi ini adalah aplikasi tugas akhir praktikum mata kuliah dasar pemrograman semester 1</em>
+  <strong></strong>
 </p>
 
 <p align="center">
   <a href="https://github.com/antono4/restoranJava"><img alt="GitHub repo" src="https://img.shields.io/badge/GitHub-antono4/restoranJava-blue?logo=github"></a>
   <a href="https://antono4.github.io/restoranJava/"><img alt="Live Demo" src="https://img.shields.io/badge/Live%20Demo-Online-success?logo=githubpages"></a>
-  <img alt="Files" src="https://img.shields.io/badge/Files-89-informational">
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/antono4/restoranJava">
+  <img alt="Files" src="https://img.shields.io/badge/Files-92-informational">
+  <img alt="Updated" src="https://img.shields.io/badge/Updated-2026-09-18 08:43:27 WIB-lightgrey">
 </p>
 
 ---
 
 ## 📖 Tentang
 
-Repository **`restoranJava`** adalah proyek perangkat lunak yang dibangun dengan HTML, CSS, JavaScript.
-Demo berjalan tersedia melalui **GitHub Pages** di [`https://antono4.github.io/restoranJava/`](https://antono4.github.io/restoranJava/).
+Repository **`restoranJava`** adalah situs web pribadi / portofolio yang diterbitkan melalui **GitHub Pages**. Situs utama berada di [`https://antono4.github.io/restoranJava/`](https://antono4.github.io/restoranJava/).
 
 ## 🗂️ Struktur Proyek
 
 ```
 restoranJava/
-.github/
-  workflows/
-LICENSE
-build.xml
-database mysql baru.sql
-manifest.mf
-nbproject/
-  build-impl.xml
-  genfiles.properties
-  private/
-  project.properties
-  project.xml
-src/
-  META-INF/
-  admin/
-  assets/
-  auth/
-  dapur/
-  kasir/
-  models/
-web/
-  css/
-  index.html
-  js/
+├── index.html          # Halaman utama (landing / portofolio)
+├── assets/             # Aset statis (css, js, img, vendor)
+├── forms/               # Form handler (PHP)
+└── web/              # Restoran Jawa - Rasa Warisan Nusantara  ->  https://antono4.github.io/restoranJava/web/
 ```
 
 ## 🌐 Sub-Proyek / Demo
 
-Repository ini juga memuat sub-proyek (masing-masing punya `index.html` tersendiri):
+Situs ini juga memuat beberapa sub-proyek (masing-masing punya `index.html` tersendiri):
 
-| Folder | Keterangan |
-|--------|-----------|
-| [`web`](./web) | Restoran Jawa - Rasa Warisan Nusantara |
+| Folder | Demo Live | Keterangan |
+|--------|-----------|-----------|
+| [`web`](./web) | [https://antono4.github.io/restoranJava/web/](https://antono4.github.io/restoranJava/web/) | Restoran Jawa - Rasa Warisan Nusantara |
 
 ## 🛠️ Teknologi
 
-Berdasarkan ekstensi berkas yang terdeteksi di repository:
+Berdasarkan isi repository, proyek ini menggunakan:
 
 - `HTML`
 - `CSS`
 - `JavaScript`
 
-> Total **89 berkas** di repository (di luar `.git`, `node_modules`, `dist`, dan `build`).
+> Total **92 file** terdeteksi di repository.
 
 ## 🚀 Menjalankan Secara Lokal
 
-Lihat berkas konfigurasi di repository ini untuk cara menjalankannya.
+Karena ini situs statis (HTML/CSS/JS/PHP), cukup buka `index.html` di browser, atau jalankan server lokal:
+
+```bash
+# Tanpa dependency
+python3 -m http.server 8000
+# lalu buka http://localhost:8000
+
+# atau dengan PHP (untuk form handler di forms/)
+php -S localhost:8000
+```
 
 ## 📬 Kontak
 
 - GitHub: [antono4](https://github.com/antono4)
+- Situs: [https://antono4.github.io/restoranJava/](https://antono4.github.io/restoranJava/)
 
 ## 📄 Lisensi
 
-Proyek ini dilisensikan di bawah MIT License — lihat berkas [`LICENSE`](./LICENSE).
+Lihat berkas [`LICENSE`](./LICENSE) untuk informasi lisensi.
 
 ---
 
-<sub>README ini di-generate otomatis oleh GitHub Actions `.github/workflows/generate-readme.yml`.</sub>
+<sub>README ini di-generate otomatis pada **2026-09-18 08:43:27 WIB** oleh GitHub Actions `.github/workflows/generate-readme.yml`.</sub>
