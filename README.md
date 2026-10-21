@@ -1,1 +1,26 @@
-Last updated: 2026-10-21 18:31:00 WIB
+# restoranJava
+
+
+
+## 📋 Overview
+
+This repository contains **95 files** and is built with the following technologies:
+
+Not detected
+
+## 🚀 Quick Start
+
+## ✨ Features
+
+- 📝 Auto-generated documentation
+
+## 🛠️ Technologies
+
+Not detected
+
+## 📄 License
+
+MIT License
+
+---
+*Last updated: 2026-10-21 18:38:17 WIB*
